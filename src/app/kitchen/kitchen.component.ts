@@ -7,6 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class KitchenComponent implements OnInit {
 
+  oven Oven;
+
+  eggs$!: Observable<Egg[]>;
+  salt$!: Observable<any>;
+  butter$!: Observable<any>;
+
   constructor() { }
 
   ngOnInit() {
