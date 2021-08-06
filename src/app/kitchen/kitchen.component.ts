@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 })
 export class KitchenComponent implements OnInit {
   oven: Oven;
+  smallbowl: Smallbowl;
+  bigbowl: Bigbowl;
 
   eggs$!: Observable<Egg[]>;
   salt$!: Observable<any>;
@@ -26,6 +28,10 @@ class Oven {
     this.temperature = temp;
   }
 }
+
+class Smallbowl {}
+
+class Bigbowl {}
 
 class CupcakeFactory {}
 
