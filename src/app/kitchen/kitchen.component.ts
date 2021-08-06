@@ -62,6 +62,8 @@ export class KitchenComponent implements OnInit {
   ngOnInit() {}
 }
 
+class CupcakeFactory {}
+
 class Oven {
   temperature$: number;
 
@@ -88,13 +90,10 @@ class Bowl {
   }
 }
 
-class Bigbowl {
-  public add(butter$: any, sugar$: any, oil$: any, vanilla$: any) {}
+class cupcakePan {
+  filled$!: boolean;
+  baked$!: boolean;
 }
-
-class cupcakePan {}
-
-class CupcakeFactory {}
 
 class Egg {
   isCracked$!: boolean;
