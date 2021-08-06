@@ -13,6 +13,7 @@ export class KitchenComponent implements OnInit {
   cupcakePan: cupcakePan;
 
   eggs$!: Observable<Egg[]>;
+  eggsNeeded$!: number;
   salt$!: Observable<any>;
   butter$!: Observable<any>;
   sugar$!: Observable<any>;
@@ -20,6 +21,7 @@ export class KitchenComponent implements OnInit {
   bakingPowder$!: Observable<any>;
   oil$!: Observable<any>;
   vanilla$!: Observable<any>;
+  milk$!: Observable<any>;
 
   constructor(private cupcakeFactory: CupcakeFactory) {
     this.oven.preheat(350);
@@ -32,6 +34,29 @@ export class KitchenComponent implements OnInit {
     this.bigBowl.add(this.sugar$);
     this.bigBowl.add(this.oil$);
     this.bigBowl.add(this.vanilla$);
+    this.bigBowl.mix();
+
+    for (var i = 0; i < this.eggsNeeded$; i++) {
+      this.eggs$[i].crack();
+      this.bigBowl.add(this.eggs$[i]);
+      this.bigBowl.mix();
+    }
+
+    this.bigBowl.add(
+      this.mediumBowl.half(0, this.mediumBowl.content$.length / 2)
+    );
+    this.bigBowl.mix();
+
+    this.bigBowl.add(this.milk$);
+    this.bigBowl.mix();
+
+    this.bigBowl.add(
+      this.mediumBowl.half(
+        this.mediumBowl.content$.length / 2,
+        this.mediumBowl.content$.length
+      )
+    );
+    this.bigBowl.mix();
   }
 
   ngOnInit() {}
@@ -47,12 +72,20 @@ class Oven {
 
 class Bowl {
   content$!: Array<any>;
+  isMixed!: boolean;
 
   public add(ingredient$: any) {
     this.content$.push(ingredient$);
+    this.isMixed = false;
   }
 
-  public mix() {}
+  public mix() {
+    this.isMixed = true;
+  }
+
+  public half(startIndex: number, endIndex: number): Array<any> {
+    return this.content$.slice(startIndex, endIndex);
+  }
 }
 
 class Bigbowl {
@@ -63,4 +96,10 @@ class cupcakePan {}
 
 class CupcakeFactory {}
 
-class Egg {}
+class Egg {
+  isCracked$!: boolean;
+
+  public crack() {
+    this.isCracked$ = true;
+  }
+}
