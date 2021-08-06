@@ -24,6 +24,8 @@ export class KitchenComponent implements OnInit {
   milk$!: Observable<any>;
 
   constructor(private cupcakeFactory: CupcakeFactory) {
+    cupcakeFactory.makeCupCakes();
+
     this.oven.preheat(350);
     this.mediumBowl.add(this.flour$);
     this.mediumBowl.add(this.bakingPowder$);
@@ -62,13 +64,22 @@ export class KitchenComponent implements OnInit {
   ngOnInit() {}
 }
 
-class CupcakeFactory {}
+class CupcakeFactory {
+  public makeCupCakes() {}
+}
 
 class Oven {
-  temperature$: number;
+  temperature$!: number;
+  cupcakePan$!: cupcakePan;
 
   public preheat(temp$: number) {
     this.temperature$ = temp$;
+  }
+
+  public bake(cupcakePan$: cupcakePan) {}
+
+  public turnOff() {
+    this.temperature$ = 0;
   }
 }
 
@@ -93,8 +104,6 @@ class Bowl {
 class cupcakePan {
   filled$!: boolean;
   baked$!: boolean;
-
-  
 }
 
 class Egg {
