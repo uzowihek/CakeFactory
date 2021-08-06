@@ -8,30 +8,58 @@ import { Observable } from 'rxjs';
 })
 export class KitchenComponent implements OnInit {
   oven: Oven;
-  smallbowl: Smallbowl;
-  bigbowl: Bigbowl;
+  mediumBowl: Bowl;
+  bigBowl: Bowl;
+  cupcakePan: cupcakePan;
 
   eggs$!: Observable<Egg[]>;
   salt$!: Observable<any>;
   butter$!: Observable<any>;
+  sugar$!: Observable<any>;
+  flour$!: Observable<any>;
+  bakingPowder$!: Observable<any>;
+  oil$!: Observable<any>;
+  vanilla$!: Observable<any>;
 
   constructor(private cupcakeFactory: CupcakeFactory) {
-    this.oven.preheat(100);
+    this.oven.preheat(350);
+    this.mediumBowl.add(this.flour$);
+    this.mediumBowl.add(this.bakingPowder$);
+    this.mediumBowl.add(this.salt$);
+    this.mediumBowl.mix();
+
+    this.bigBowl.add(this.butter$);
+    this.bigBowl.add(this.sugar$);
+    this.bigBowl.add(this.oil$);
+    this.bigBowl.add(this.vanilla$);
   }
 
   ngOnInit() {}
 }
 
 class Oven {
-  temperature: BigInteger;
-  public preheat(temp) {
-    this.temperature = temp;
+  temperature$: number;
+
+  public preheat(temp$: number) {
+    this.temperature$ = temp$;
   }
 }
 
-class Smallbowl {}
+class Bowl {
+  content$!: Array<any>;
 
-class Bigbowl {}
+  public add(ingredient$: any) {
+    this.content$.push(ingredient$);
+  }
+
+  public mix() {}
+}
+
+class Bigbowl {
+  public add(butter$: any, sugar$: any, oil$: any, vanilla$: any) {}
+}
+
+class cupcakePan {}
 
 class CupcakeFactory {}
 
