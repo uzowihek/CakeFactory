@@ -93,6 +93,8 @@ class Bowl {
 class cupcakePan {
   filled$!: boolean;
   baked$!: boolean;
+
+  
 }
 
 class Egg {
