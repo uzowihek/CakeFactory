@@ -22,23 +22,27 @@ export class KitchenComponent implements OnInit {
   vanilla$!: Observable<any>;
   milk$!: Observable<any>;
 
-
   constructor(private cupcakeFactory: CupcakeFactory) {
+    this.oven.preheat(350);
 
     this.flour$ = cupcakeFactory.getFlour();
 
-    this.flour$.subscribe(
-      {
-        next: 
-      }
-    )
+    this.flour$.subscribe({
+      next: function(value: any) {
+        this.mediumBowl.add(value);
+      },
 
-    
+      error: function() {
+        console.log('Error at flour');
+      },
+
+      complete: function() {
+        this.bakingPowder$ = cupcakeFactory;
+      }
+    });
 
     cupcakeFactory.makeCupCakes();
 
-    this.oven.preheat(350);
-    this.mediumBowl.add(this.flour$);
     this.mediumBowl.add(this.bakingPowder$);
     this.mediumBowl.add(this.salt$);
     this.mediumBowl.mix();
@@ -74,17 +78,51 @@ export class KitchenComponent implements OnInit {
     this.oven.bake(this.cupcakePan);
   }
 
-  
-
   ngOnInit() {}
 }
 
 class CupcakeFactory {
-  
-
   public makeCupCakes() {}
 
-  public getFlour(): any{
+  eggs$!: Observable<Egg[]>;
+  salt$!: Observable<any>;
+  butter$!: Observable<any>;
+  sugar$!: Observable<any>;
+  flour$!: Observable<any>;
+  bakingPowder$!: Observable<any>;
+  oil$!: Observable<any>;
+  vanilla$!: Observable<any>;
+  milk$!: Obs;
+
+  public getSalt(): any {
+    return;
+  }
+
+  public getButter(): any {
+    return;
+  }
+
+  public getSugar(): any {
+    return;
+  }
+
+  public getFlour(): any {
+    return;
+  }
+
+  public getBakingPowder(): any {
+    return;
+  }
+
+  public getOil(): any {
+    return;
+  }
+
+  public getVanilla(): any {
+    return;
+  }
+
+  public getMilk(): any {
     return;
   }
 
