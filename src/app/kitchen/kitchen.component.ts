@@ -37,13 +37,25 @@ export class KitchenComponent implements OnInit {
       },
 
       complete: function() {
-        this.bakingPowder$ = cupcakeFactory;
+        this.bakingPowder$ = cupcakeFactory.getBakingPowder();
+      }
+    });
+
+    this.bakingPowder$.subscribe({
+      next: function(value: any) {
+        this.mediumBowl.add(value);
+      },
+
+      error: function() {
+        console.log('Error at baking powder');
+      },
+
+      complete: function() {
+        this.salt$ = cupcakeFactory.getSalt();
       }
     });
 
     cupcakeFactory.makeCupCakes();
-
-    this.mediumBowl.add(this.bakingPowder$);
     this.mediumBowl.add(this.salt$);
     this.mediumBowl.mix();
 
@@ -83,16 +95,6 @@ export class KitchenComponent implements OnInit {
 
 class CupcakeFactory {
   public makeCupCakes() {}
-
-  eggs$!: Observable<Egg[]>;
-  salt$!: Observable<any>;
-  butter$!: Observable<any>;
-  sugar$!: Observable<any>;
-  flour$!: Observable<any>;
-  bakingPowder$!: Observable<any>;
-  oil$!: Observable<any>;
-  vanilla$!: Observable<any>;
-  milk$!: Obs;
 
   public getSalt(): any {
     return;
