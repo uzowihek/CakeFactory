@@ -55,21 +55,79 @@ export class KitchenComponent implements OnInit {
       }
     });
 
-    cupcakeFactory.makeCupCakes();
-    this.mediumBowl.add(this.salt$);
-    this.mediumBowl.mix();
+    this.salt$.subscribe({
+      next: function(value: any) {
+        this.mediumBowl.add(value);
+      },
 
-    this.bigBowl.add(this.butter$);
-    this.bigBowl.add(this.sugar$);
-    this.bigBowl.add(this.oil$);
-    this.bigBowl.add(this.vanilla$);
-    this.bigBowl.mix();
+      error: function() {
+        console.log('Error at salt');
+      },
 
-    /*for (var i = 0; i < this.eggsNeeded$; i++) {
+      complete: function() {
+        this.mediumBowl.mix();
+      }
+    });
+
+    this.butter$ = cupcakeFactory.getButter();
+    this.butter$.subscribe({
+      next: function(value: any) {
+        this.bigBowl.add(value);
+      },
+
+      error: function() {
+        console.log('Error at butter');
+      },
+
+      complete: function() {
+        this.sugar$ = cupcakeFactory.getSugar();
+      }
+    });
+    this.sugar$.subscribe({
+      next: function(value: any) {
+        this.bigBowl.add(value);
+      },
+
+      error: function() {
+        console.log('Error at sugar');
+      },
+
+      complete: function() {
+        this.oil$ = cupcakeFactory.getOil();
+      }
+    });
+    this.oil$.subscribe({
+      next: function(value: any) {
+        this.bigBowl.add(value);
+      },
+
+      error: function() {
+        console.log('Error at oil');
+      },
+
+      complete: function() {
+        this.vanilla$ = cupcakeFactory.getVanilla();
+      }
+    });
+    this.vanilla$.subscribe({
+      next: function(value: any) {
+        this.bigBowl.add(value);
+      },
+
+      error: function() {
+        console.log('Error at vanilla');
+      },
+
+      complete: function() {
+        this.bigBowl.mix();
+      }
+    });
+
+    for (var i = 0; i < 2; i++) {
       this.eggs$[i].crack();
       this.bigBowl.add(this.eggs$[i]);
       this.bigBowl.mix();
-    }*/
+    }
 
     this.bigBowl.add(
       this.mediumBowl.half(0, this.mediumBowl.content$.length / 2)
