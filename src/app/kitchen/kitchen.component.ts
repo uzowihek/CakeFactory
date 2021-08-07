@@ -23,10 +23,6 @@ export class KitchenComponent implements OnInit {
   milk$!: Observable<any>;
 
   constructor(private cupcakeFactory: CupcakeFactory) {
-    this.oven.preheat(350);
-
-    this.flour$ = cupcakeFactory.getFlour();
-
     this.flour$.subscribe({
       next: function(value: any) {
         this.mediumBowl.add(value);
@@ -69,7 +65,6 @@ export class KitchenComponent implements OnInit {
       }
     });
 
-    this.butter$ = cupcakeFactory.getButter();
     this.butter$.subscribe({
       next: function(value: any) {
         this.bigBowl.add(value);
@@ -148,7 +143,11 @@ export class KitchenComponent implements OnInit {
     this.oven.bake(this.cupcakePan);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.oven.preheat(350);
+    this.flour$ = this.cupcakeFactory.getFlour();
+    this.butter$ = this.cupcakeFactory.getButter();
+  }
 }
 
 class CupcakeFactory {
