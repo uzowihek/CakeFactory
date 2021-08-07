@@ -13,7 +13,6 @@ export class KitchenComponent implements OnInit {
   cupcakePan: cupcakePan;
 
   eggs$!: Observable<Egg[]>;
-  eggsNeeded$!: number;
   salt$!: Observable<any>;
   butter$!: Observable<any>;
   sugar$!: Observable<any>;
@@ -23,7 +22,19 @@ export class KitchenComponent implements OnInit {
   vanilla$!: Observable<any>;
   milk$!: Observable<any>;
 
+
   constructor(private cupcakeFactory: CupcakeFactory) {
+
+    this.flour$ = cupcakeFactory.getFlour();
+
+    this.flour$.subscribe(
+      {
+        next: 
+      }
+    )
+
+    
+
     cupcakeFactory.makeCupCakes();
 
     this.oven.preheat(350);
@@ -38,11 +49,11 @@ export class KitchenComponent implements OnInit {
     this.bigBowl.add(this.vanilla$);
     this.bigBowl.mix();
 
-    for (var i = 0; i < this.eggsNeeded$; i++) {
+    /*for (var i = 0; i < this.eggsNeeded$; i++) {
       this.eggs$[i].crack();
       this.bigBowl.add(this.eggs$[i]);
       this.bigBowl.mix();
-    }
+    }*/
 
     this.bigBowl.add(
       this.mediumBowl.half(0, this.mediumBowl.content$.length / 2)
@@ -59,27 +70,41 @@ export class KitchenComponent implements OnInit {
       )
     );
     this.bigBowl.mix();
+
+    this.oven.bake(this.cupcakePan);
   }
+
+  
 
   ngOnInit() {}
 }
 
 class CupcakeFactory {
+  
+
   public makeCupCakes() {}
+
+  public getFlour(): any{
+    return;
+  }
+
+  public getEggs(): Egg[] {
+    return Egg[2];
+  }
 }
 
 class Oven {
-  temperature$!: number;
-  cupcakePan$!: cupcakePan;
+  temperature!: number;
+  cupcakePan!: cupcakePan;
 
-  public preheat(temp$: number) {
-    this.temperature$ = temp$;
+  public preheat(temp: number) {
+    this.temperature = temp;
   }
 
   public bake(cupcakePan$: cupcakePan) {}
 
   public turnOff() {
-    this.temperature$ = 0;
+    this.temperature = 0;
   }
 }
 
@@ -107,9 +132,13 @@ class cupcakePan {
 }
 
 class Egg {
-  isCracked$!: boolean;
+  isCracked!: boolean;
+
+  constructor() {
+    this.isCracked = false;
+  }
 
   public crack() {
-    this.isCracked$ = true;
+    this.isCracked = true;
   }
 }
