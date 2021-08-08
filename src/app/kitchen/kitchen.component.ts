@@ -117,41 +117,55 @@ export class KitchenComponent implements OnInit {
         this.bigBowl.mix();
       }
     });
-
-    for (var i = 0; i < 2; i++) {
-      this.eggs$[i].crack();
-      this.bigBowl.add(this.eggs$[i]);
-      this.bigBowl.mix();
-    }
-
-    this.bigBowl.add(
-      this.mediumBowl.half(0, this.mediumBowl.content$.length / 2)
-    );
-    this.bigBowl.mix();
-
-    this.bigBowl.add(this.milk$);
-    this.bigBowl.mix();
-
-    this.bigBowl.add(
-      this.mediumBowl.half(
-        this.mediumBowl.content$.length / 2,
-        this.mediumBowl.content$.length
-      )
-    );
-    this.bigBowl.mix();
-
-    this.oven.bake(this.cupcakePan);
   }
 
   ngOnInit() {
     this.oven.preheat(350);
-    this.flour$ = this.cupcakeFactory.getFlour();
-    this.butter$ = this.cupcakeFactory.getButter();
+    this.flour$ = this.cupcakeFactory.getFlour(); //mediumbowl stream
+    this.butter$ = this.cupcakeFactory.getButter(); //bigbowl stream
+
+    this.cupcakeFactory.makeBatter(
+      this.eggs$,
+      this.milk$,
+      this.bigBowl,
+      this.mediumBowl
+    );
+
+    //Let batter sit for 20 seconds to handle OverMixedBatterException
+    setTimeout(() => {
+      this.cupcakePan.fillPan();
+    }, 20000);
+
+    this.oven.bake(this.cupcakePan);
   }
 }
 
 class CupcakeFactory {
-  public makeCupCakes() {}
+  public makeBatter(
+    eggs$: Observable<Egg[]>,
+    milk$: any,
+    bigBowl: Bowl,
+    mediumBowl: Bowl
+  ) {
+    for (var i = 0; i < 2; i++) {
+      eggs$[i].crack();
+      bigBowl.add(eggs$[i]);
+      bigBowl.mix();
+    }
+
+    bigBowl.add(mediumBowl.half(0, mediumBowl.content$.length / 2));
+    bigBowl.mix();
+
+    bigBowl.add(milk$);
+    bigBowl.mix();
+
+    bigBowl.add(
+      mediumBowl.half(
+        mediumBowl.content$.length / 2,
+        mediumBowl.content$.length
+      )
+    );
+  }
 
   public getSalt(): any {
     return;
@@ -226,6 +240,10 @@ class Bowl {
 class cupcakePan {
   filled$!: boolean;
   baked$!: boolean;
+
+  public fillPan() {
+    this.filled$ = true;
+  }
 }
 
 class Egg {
